@@ -1,0 +1,22 @@
+#sentaku {
+  font-size: large;
+}
+#main {
+  margin-top: 10px;
+  margin-left: 30px;
+}
+.main2 {
+  margin-right: 80px;
+}
+.container {
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
+  margin-top: 20px;
+}
+.container .text-muted {
+  text-align: center;
+}
+img {
+  width: 100%;
+}
