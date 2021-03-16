@@ -116,7 +116,7 @@ if ($arr === NULL) {
         </select>
       </section>
 
-      <p><?php print("選択されている年 : ".$year); ?></p>
+      <p><?php print("選択されている年 : ".htmlspecialchars($year, ENT_QUOTES)); ?></p>
 
     </div>
   </div>
@@ -162,6 +162,10 @@ for($i=0;$i<=$json_count-1;$i++):
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);// リダイレクト許可
       curl_setopt($ch, CURLOPT_MAXREDIRS, 5);// 最大リダイレクト数
       $html = curl_exec($ch);
+
+      //文字コード変換 <- 重要(スクレイピングした際は必ず入れる)
+      $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'ASCII, JIS, UTF-8, SJIS');
+
     //DOMDocumentとDOMXpathの作成
     $dom = new DOMDocument;
     @$dom->loadHTML($html);
@@ -181,11 +185,58 @@ for($i=0;$i<=$json_count-1;$i++):
       //echo $titleOGP;
       //echo '</a>';
       //echo '<p>',$description,'</p>';
+
+      //画像が404かを判定する
+      // アクセスしたいURL
+      $url = $imageOGP;
+
+      $ch = curl_init(); // はじめます。
+
+      // アクセスしたいURLをセット
+      curl_setopt($ch, CURLOPT_URL, $url);
+      // 取得結果を得るための設定
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+      //echo "「{$url}」にアクセスしています\n";
+
+      // 実行
+      $result = curl_exec($ch);
+
+      // 成功していれば
+      if($result != false){
+          // その時の情報を取得
+          $header = curl_getinfo($ch);
+      }
+      // 終わります。
+      curl_close($ch);
+
+      // 取得した情報からHTTPステータスコードを取り出します。
+      $status = $result ? $header['http_code'] : false;
+
+      // 結果を出力します
+      // if($status == 404)
+      //     echo "404です\n";
+      // else
+      //     echo "404ではないです\n";
+      // $imageOGPがnullだったら
       if(empty($imageOGP)){
         $imageOGP = "noimage.jpg";
         $imageOGPalt = "画像が取得できませんでした";
       }else{
         $imageOGPalt = "画像";
+      }
+      // $imageOGPが404で取得できなかったら
+      if($status == 404){
+        $imageOGP = "noimage.jpg";
+        $imageOGPalt = "(404)画像が取得できませんでした";
+      }else{
+        $imageOGPalt = "画像";
+      }
+      // $imageOGPが相対パスか判定する // 相対パスだったらnoimage.jpg
+      if(strpos($imageOGP,'http') === false){
+        //'$imageOGP'のなかに'http'が含まれていない場合
+        $imageOGP = "noimage.jpg";
+        $imageOGPalt = "(404)画像が取得できませんでした";
       }
     //}
     ?>
@@ -194,15 +245,7 @@ for($i=0;$i<=$json_count-1;$i++):
     <h5 class="card-title"><?php print($title[$i]); ?></h5>
     <h6 class="card-subtitle mb-2 text-muted"><?php print($title_short1[$i]); ?></h6>
     <img src="<?php print($imageOGP); ?>" alt="<?php print($imageOGPalt); ?>">
-    <?php  
-    $descriptionOGPcheck = utf8_decode($descriptionOGP);
-    if(strpos($descriptionOGPcheck,'???') !== false){
-      $descriptionOGPcheck = $descriptionOGP;
-    }else{
-      $descriptionOGPcheck = utf8_decode($descriptionOGP);
-    }
-    ?>
-    <p><?php print($descriptionOGPcheck); ?></p>
+    <p><?php print($descriptionOGP); ?></p>
     <?php 
     if($sex[$i] == 0){
             $targetSex = "男性向け";
