@@ -1,8 +1,25 @@
-import React from 'react';
+import React,{ useState,useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import axios from 'axios';
+
 function App() {
+  const [posts, setPosts] = useState([]);
+  // 無限ループを回避する
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get('http://utan.php.xdomain.jp/animeapi/api.php?when=2021/2');
+        setPosts(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+  
+  console.log(posts);
+
   return (
     <div className="App">
       <header className="App-header">
