@@ -9,13 +9,13 @@ function Footer() {
         <Typography align="center" gutterBottom>
             アニメで振り返ろう
         </Typography>
-        <Link underline='none' href={'https://github.com/Project-ShangriLa/sora-playframework-scala'}>
+        <Link underline='none' href={'https://twitter.com/uutan1108'}>
         <Typography
           style={{color: 'white'}}
           variant="subtitle1"
           align="center"
           component="p">
-          使用したAPI
+          作った人
         </Typography>
         </Link>
       </Container>

@@ -1,4 +1,5 @@
-import { AppBar,Toolbar,Typography } from '@material-ui/core';
+import { AppBar,Toolbar } from '@material-ui/core';
+import DescriptionWindow from './DescriptionWindow';
 
 function Header() {
   const style = {
@@ -12,11 +13,7 @@ function Header() {
     <>      
       <AppBar position="static" elevation={0} style={style}>
         <Toolbar>
-              <Typography
-                variant="h5"
-                style={{ color: '#ffffff', fontWeight: 'bold' }}>
-                アニメで振り返ろう
-              </Typography>
+              <DescriptionWindow />
         </Toolbar>
       </AppBar>
     </>
