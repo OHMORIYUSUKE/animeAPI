@@ -1,8 +1,6 @@
 <?php
 // PHP json https://qiita.com/fantm21/items/603cbabf2e78cb08133e
 error_reporting(E_ALL & ~ E_DEPRECATED & ~ E_USER_DEPRECATED & ~ E_NOTICE);
-//ini_set('mbstring.internal_encoding' , 'UTF-8');
-//header("Content-Type: text/html;charset=UTF-8");
 
 if(empty($_REQUEST['when'])){
   $year = "2021/1";
@@ -13,13 +11,6 @@ if(empty($_REQUEST['when'])){
 //2013/4~
 $yearArray = array("2013","2014","2015","2016","2017","2018","2019","2020","2021");
 $coolArry = array("1","2","3","4");
-//$year = "2020/1";
-
-// $url = "https://api.moemoe.tokyo/anime/v1/master/".$year;
-// $json = file_get_contents($url);
-// $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
-// $arr = json_decode($json,true);
-
 
 $url = "https://api.moemoe.tokyo/anime/v1/master/".$year;
 $ch = curl_init();
@@ -123,39 +114,11 @@ if ($arr === NULL) {
 </div>
 
 <div id="main" class="row row-cols-1 row-cols-md-3 g-4">
-<?php
-//表示
-for($i=0;$i<=$json_count-1;$i++):
-    // print("タイトル : ". $title[$i]);
-    // print("<br>");
-    // if($sex[$i] == 0){
-    //     print("男性向け");
-    // }else{
-    //     print("女性向け");
-    // }
-    // print("<br>");
-    // print("略称 : ".$title_short1[$i]);
-    // print("<br>");
-    // print("Twitter : "."@".$twitter_account[$i]);
-    // print("<br>");
-    // print("Twitter : "."#".$twitter_hash_tag[$i]);
-    // print("<br>");
-    // print("URL : ".$public_url[$i]);
-    // print("<br>");
-    // print("データの作成日時 : ".$created_at[$i]);
-    // print("<br>");
-    // print("データの更新日時 : ".$updated_at[$i]);
-    // print("<br>");
-    // print("---------------------------------------------------");
-    // print("<br>");
-    ?>
+<?php for($i=0;$i<=$json_count-1;$i++):?>
     <?php
     //OGPを取得したいURL
     $url = $public_url[$i];
 
-    //Webページの読み込みと文字コード変換
-    // $html = file_get_contents($url);
-    // $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'auto');
     $ch = curl_init($url);// urlは対象のページ
       curl_setopt($ch, CURLOPT_HEADER, 0);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);// exec時に出力させない
@@ -171,20 +134,11 @@ for($i=0;$i<=$json_count-1;$i++):
     @$dom->loadHTML($html);
     $xpath = new DOMXPath($dom);
     //XPathでmetaタグのog:titleおよびog:imageを取得
-    //$node_title = $xpath->query('//meta[@property="og:title"]/@content');
     $node_image = $xpath->query('//meta[@property="og:image"]/@content');
     $node_description = $xpath->query('//meta[@property="og:description"]/@content');
-    //if ($node_title->length > 0 && $node_image->length > 0 && $node_description->length > 0) {
-      //タグが存在すればサムネイルとタイトルを表示してリンクする
-      //$titleOGP = $node_title->item(0)->nodeValue;
+
       $imageOGP = $node_image->item(0)->nodeValue;
       $descriptionOGP = $node_description->item(0)->nodeValue;
-      //echo '<a href="'.$url.'">';
-      //echo '<img src="'.$image.'">';
-      //echo '<br>';
-      //echo $titleOGP;
-      //echo '</a>';
-      //echo '<p>',$description,'</p>';
 
       //画像が404かを判定する
       // アクセスしたいURL
@@ -196,8 +150,6 @@ for($i=0;$i<=$json_count-1;$i++):
       curl_setopt($ch, CURLOPT_URL, $url);
       // 取得結果を得るための設定
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-      //echo "「{$url}」にアクセスしています\n";
 
       // 実行
       $result = curl_exec($ch);
@@ -214,11 +166,6 @@ for($i=0;$i<=$json_count-1;$i++):
       $status = $result ? $header['http_code'] : false;
 
       // 結果を出力します
-      // if($status == 404)
-      //     echo "404です\n";
-      // else
-      //     echo "404ではないです\n";
-      // $imageOGPがnullだったら
       if(empty($imageOGP)){
         $imageOGP = "noimage.jpg";
         $imageOGPalt = "画像が取得できませんでした";
@@ -238,7 +185,6 @@ for($i=0;$i<=$json_count-1;$i++):
         $imageOGP = "noimage.jpg";
         $imageOGPalt = "(404)画像が取得できませんでした";
       }
-    //}
     ?>
 <div class="card" style="width: 18rem;">
   <div class="card-body">
