@@ -86,7 +86,7 @@ function App() {
       <>
         <div style={{ position: 'absolute', top: 0, width: '100%' }}>
           <Header />
-          <LinearProgress />
+          <LinearProgress color='secondary' />
         </div>
       </>
     );
@@ -141,6 +141,10 @@ function App() {
                 title={post['title']}
                 image={post['image']}
                 description={post['description']}
+                twitter_account={post['twitter_account']}
+                public_url={post['public_url']}
+                twitter_hash_tag={post['twitter_hash_tag']}
+                sex={post['sex']}
               />
             </Grid>
           </>

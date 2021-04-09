@@ -7,8 +7,11 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
+import Link from '@material-ui/core/Link';
 import clsx from 'clsx';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import HomeIcon from '@material-ui/icons/Home';
 
 import noimage from '../images/noimage.png'
 
@@ -28,16 +31,20 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: 10,
       marginRight: 15,
       display: 'inline-block',
+      fontSize: 'large',
     },
     expand: {
       transform: 'rotate(0deg)',
-      marginLeft: 'auto',
+      float: 'right',
       transition: theme.transitions.create('transform', {
         duration: theme.transitions.duration.shortest,
       }),
     },
     expandOpen: {
       transform: 'rotate(180deg)',
+    },
+    icon: {
+      marginRight: 20,
     },
   }),
 );
@@ -46,6 +53,10 @@ type Props = {
   title: string;
   image: string;
   description: string;
+  twitter_account: string;
+  public_url: string;
+  twitter_hash_tag: string;
+  sex: number;
 };
 
 const PostCard: React.FC<Props> = (props) => {
@@ -64,6 +75,12 @@ const PostCard: React.FC<Props> = (props) => {
     image = noimage;
   }else{
     image = props.image;
+  }
+  let sex = '';
+  if (props.sex === 0){
+    sex = '男性向け';
+  }else{
+    sex = '女性向け';
   }
 
   return (
@@ -93,7 +110,38 @@ const PostCard: React.FC<Props> = (props) => {
                   <CardContent>
                     <Typography paragraph>
                       {props.description}
+                      <br/>
+                      <Link 
+                        href={`https://twitter.com/hashtag/${props.twitter_hash_tag}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >
+                        <Typography variant="body2" className={classes.underDescription}>
+                          #{props.twitter_hash_tag}
+                        </Typography>
+                      </Link>
+                      <Typography variant="body2" className={classes.underDescription}>
+                        {sex}
+                      </Typography>
                     </Typography>
+                    <Link 
+                      className={classes.icon}
+                      underline='none' 
+                      href={props.public_url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      >
+                      <HomeIcon fontSize="large" />
+                    </Link>
+                    <Link 
+                      className={classes.icon}
+                      underline='none' 
+                      href={`https://twitter.com/${props.twitter_account}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      >
+                      <TwitterIcon fontSize="large" />
+                    </Link>
                   </CardContent>
                 </Collapse>
             </CardContent>
