@@ -86,7 +86,7 @@ function App() {
       <>
         <div style={{ position: 'absolute', top: 0, width: '100%' }}>
           <Header />
-          <LinearProgress />
+          <LinearProgress color='secondary' />
         </div>
       </>
     );
@@ -95,7 +95,7 @@ function App() {
   return (
     <>
     <Header />
-      <Grid container alignItems="center" justify="center">
+      <Grid container justify="center">
         <Grid item md={9}>
           <FormControl className={classes.formControl}>
               <InputLabel id="demo-controlled-open-select-label">放送年</InputLabel>
@@ -140,6 +140,11 @@ function App() {
               <PostCard 
                 title={post['title']}
                 image={post['image']}
+                description={post['description']}
+                twitter_account={post['twitter_account']}
+                public_url={post['public_url']}
+                twitter_hash_tag={post['twitter_hash_tag']}
+                sex={post['sex']}
               />
             </Grid>
           </>
